@@ -12,7 +12,7 @@ Add `hyper-reorderable-tabs` to the `plugins` list in your `~/.hyper.js` config 
 
 ## Usage
 
-Support Drag&drop [if this pr is merged](https://github.com/zeit/hyper/pull/3197), also support reordering with keyboard shortcuts is available.
+Support Drag&drop [if this pr is merged](https://github.com/zeit/hyper/pull/3197), also support reordering with keyboard shortcuts.
 
 To move active tab around, press `alt+left/right arrow` or `ctrl+alt+shift+left/right arrow`, or configure your own shortcuts using config (using [mousetrap](https://craig.is/killing/mice) supported keys):
 
