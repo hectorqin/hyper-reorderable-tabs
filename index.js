@@ -5,7 +5,7 @@ const LEFT = 'left';
 const RIGHT = 'right';
 
 exports.decorateConfig = config => {
-  const hyperTabsConfig = Object.assign({}, config.hyperTabs || {})
+  const hyperTabsConfig = { ...config.hyperTabs || {}}
   let navCss = '';
   hyperTabsConfig.navMoveable = hyperTabsConfig.navMoveable ? parseInt(hyperTabsConfig.navMoveable, 10) : 0
   if (hyperTabsConfig.navMoveable) {
@@ -18,8 +18,7 @@ exports.decorateConfig = config => {
     `;
   }
 
-  return Object.assign({}, config, {
-    css: `
+  return { ...config, css: `
         ${config.css || ''}
         ${navCss}
         .tab_first {
@@ -47,8 +46,7 @@ exports.decorateConfig = config => {
         .tab_drop_right:after {
             right: 0;
         }
-  `,
-  })
+  `,}
 };
 
 // exports.decorateBrowserOptions = options =>
@@ -72,38 +70,28 @@ const orderTabs = (orderedUids, tabs) => {
 };
 
 exports.mapHeaderState = (state, map) =>
-  Object.assign({}, map, {
-    cols: state.ui.cols,
+  ({ ...map, cols: state.ui.cols,
     sessionsOrdered: state.termGroups.termGroupsOrdered,
     tabs: state.termGroups.termGroupsOrdered
       ? orderTabs(state.termGroups.termGroupsOrdered, map.tabs)
-      : map.tabs,
-  });
+      : map.tabs,});
 
 exports.getTabsProps = (parentProps, props) =>
-  Object.assign({}, props, {
-    tabWidth: window.innerWidth / props.tabs.length,
+  ({ ...props, tabWidth: window.innerWidth / props.tabs.length,
     moveTab: parentProps.moveTab,
-    sessionsOrdered: parentProps.sessionsOrdered,
-  });
+    sessionsOrdered: parentProps.sessionsOrdered,});
 
 exports.getTabProps = (tab, parentProps, props) =>
-  Object.assign({}, props, {
-    tabId: tab.uid,
+  ({ ...props, tabId: tab.uid,
     tabPosition: parentProps.tabs.indexOf(tab),
     tabWidth: parentProps.tabWidth,
     moveTab: parentProps.moveTab,
-    shortcutMoveTab: parentProps.shortcutMoveTab,
-  });
+    shortcutMoveTab: parentProps.shortcutMoveTab,});
 
 exports.getTermGroupProps = (tab, parentProps, props) =>
-  Object.assign({}, props, {
-    shortcutMoveTab: parentProps.shortcutMoveTab,
-  });
+  ({ ...props, shortcutMoveTab: parentProps.shortcutMoveTab,});
 exports.getTermProps = (tab, parentProps, props) =>
-  Object.assign({}, props, {
-    shortcutMoveTab: parentProps.shortcutMoveTab,
-  });
+  ({ ...props, shortcutMoveTab: parentProps.shortcutMoveTab,});
 
 const MOVE_TAB = '@@DRAGGABLE/MOVE_TAB';
 
@@ -212,24 +200,20 @@ exports.reduceTermGroups = (state, action) => {
 };
 
 exports.mapHeaderDispatch = (dispatch, map) =>
-  Object.assign({}, map, {
-    moveTab(uid, position, isAfter) {
+  ({ ...map, moveTab(uid, position, isAfter) {
       dispatch(moveTab(uid, position, isAfter));
     },
     shortcutMoveTab(direction) {
       dispatch(shortcutMoveTab(direction));
-    },
-  });
+    },});
 
 exports.mapTermsDispatch = (dispatch, map) =>
-  Object.assign({}, map, {
-    moveTab(uid, position, isAfter) {
+  ({ ...map, moveTab(uid, position, isAfter) {
       dispatch(moveTab(uid, position, isAfter));
     },
     shortcutMoveTab(direction) {
       dispatch(shortcutMoveTab(direction));
-    },
-  });
+    },});
 
 const setActiveSession = uid => dispatch => {
   dispatch({
@@ -357,11 +341,9 @@ exports.decorateTerm = (Term, { React }) => {
     render() {
       return React.createElement(
         Term,
-        Object.assign({}, this.props, {
-          ref: el => {
+        { ...this.props, ref: el => {
             this.el = el;
-          },
-        }),
+          },},
       );
     }
   }
@@ -416,7 +398,7 @@ exports.decorateTab = (Tab, { React }) => {
           event.preventDefault();
           const tabId = event.dataTransfer.getData('tabId');
 
-          this.context.store.dispatch(
+          window.store.dispatch(
               moveTab(tabId, this.props.tabPosition, this.state.droppablePosition === RIGHT)
           );
 
@@ -442,10 +424,6 @@ exports.decorateTab = (Tab, { React }) => {
               }),
           }, React.createElement(Tab, this.props)));
       }
-  }
-
-  DecoratedTab.contextTypes = {
-    store: () => null
   }
 
   return DecoratedTab;

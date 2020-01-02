@@ -3,5 +3,7 @@
     "env": {
         "browser": true,
     },
-    "rules": {}
+    "rules": {
+        "max-classes-per-file": "off"
+    }
 }
